@@ -1,0 +1,41 @@
+import mongoose from "mongoose";
+import { configDotenv } from "dotenv";
+
+configDotenv();
+
+const uri = process.env.uri;
+
+const connectionDb = async () => {
+    try {
+        await mongoose.connect(uri+"/sample_restaurants");
+        console.log("mongoDb connected");
+        return mongoose.connection;
+    } catch (error) {
+        console.log("error occurred during mongodb connection", error);
+        throw error; 
+    }
+};
+
+const Aggregation = async () =>{
+    try {
+        const db = await connectionDb();
+        const pipeline = [
+            {
+                $project : {
+                    "name" : 1,
+                    "cuisine" : 1,
+                    "address" : 1
+                }
+            },
+            {
+                $limit : 3
+            }
+        ]
+        const result = await db.collection('restaurants').aggregate(pipeline).toArray();
+        console.log(result);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+Aggregation();

@@ -40,3 +40,6 @@ const Aggregation = async () => {
 }
 
 Aggregation();
+
+// pipeline using lookup
+// use populate method

@@ -1,17 +1,11 @@
-import mongoose from "mongoose";
-
-const itemSchema = new mongoose.Schema({
-    productId: { type: String, required: true },
-    quantity: { type: Number, required: true },
-    price: { type: Number, required: true }
-});
+import mongoose from 'mongoose';
+import Item from './itemSchema.js'; // Ensure this path is correct
 
 const orderSchema = new mongoose.Schema({
     orderId: { type: String, required: true, unique: true },
-    customerId: { type: String, required: true },
+    customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer' },
     orderDate: { type: Date, required: true },
-    items: { type: [itemSchema], required: true }
-    // items: [itemSchema]
+    items: [Item.schema] // Embedding Item schema
 });
 
 const Order = mongoose.model('Order', orderSchema);
